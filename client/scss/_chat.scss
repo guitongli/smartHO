@@ -1,0 +1,69 @@
+.chat {
+    flex: 0.7;
+    flex-grow: 1;
+    overflow-y: scroll;
+    padding-bottom: 150px;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 1px solid lightblue;
+        &__right {
+            p {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                margin-right: 4px;
+
+                .MuiSvgIcon-root {
+                    margin-left: 10px;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+    &__channel-name {
+        display: flex;
+        text-transform: lowercase;
+        .MuiSvgIcon-root {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+    }
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+    }
+
+    &__time {
+        color: lightblue;
+        font-weight: 300;
+    }
+}
+.chat-input {
+    border-radius: 10px;
+    form {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        input {
+            position: fixed;
+            bottom: 10px;
+            width: 70%;
+            border: 1px solid gray;
+            border-radius: 2px;
+            padding: 40px;
+        }
+        button {
+            display: none;
+        }
+    }
+}

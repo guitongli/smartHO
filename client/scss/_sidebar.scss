@@ -1,0 +1,75 @@
+@import "./config";
+
+.sidebar {
+    flex: 0.3;
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #49274b;
+    }
+    background-color: $slack-color;
+    border-top: 1px solid #49274b;
+    max-width: 260px;
+    color: white;
+    &__header {
+        margin-top: 10px;
+        display: flex;
+        border-bottom: 1px solid #49274b;
+        padding: 13px;
+        padding-bottom: 10px;
+        justify-content: space-between;
+        .MuiSvgIcon-root {
+            padding: 5px;
+            color: #49274b;
+            font-size: 30px;
+            background-color: white;
+            border-radius: 999px;
+        }
+    }
+    &__info {
+        h2 {
+            font-size: 15ps;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+        h3 {
+            display: flex;
+            align-items: center;
+
+            font-size: 13px;
+            font-weight: 400;
+            .MuiSvgIcon-root {
+                font-size: 14px;
+                color: green;
+
+                padding: 0;
+                margin-right: 3px;
+                margin-top: 1px;
+            }
+        }
+    }
+}
+
+.sidebar-option {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    &:hover {
+        background-color: #340e36;
+        opacity: 0.9;
+    }
+    &__icon {
+        padding: 5px;
+        font-size: 15px;
+    }
+    &__channel {
+        padding: 10px 0;
+    }
+    &__hash {
+        margin-left: 5px;
+    }
+    h3 {
+        font-weight: 500;
+    }
+}
