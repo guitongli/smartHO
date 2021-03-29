@@ -1,5 +1,5 @@
-import React from 'react';
-import { Component } from 'react';
+import React from "react";
+import { Component } from "react";
 // import { useEffect, useState } from 'react';
 import * as faceapi from "face-api.js";
 
@@ -7,30 +7,30 @@ export default class Face extends Component {
     constructor() {
         super();
         this.state = {
-            expressions : {
-                neutral: '😐',
-                happy: '😃',
-                sad: '😥',
-                angry: '😠',
-                fearful: '😱',
-                disgusted: '🤢',
-                surprised: '😮',
+            expressions: {
+                neutral: "😐",
+                happy: "😃",
+                sad: "😥",
+                angry: "😠",
+                fearful: "😱",
+                disgusted: "🤢",
+                surprised: "😮",
             },
             currentExpression: null,
-            video:{},
+            video: {},
         };
     }
 
     // loading face-api models on load
     componentDidMount() {
         Promise.all([
-            faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-            faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-            faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-        ]).then(startVideo);
+            faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+            faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+            faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+        ]).then(this.startVideo);
     }
 
-    startVideo() {  // how can i make this async
+    async startVideo() {
         // accessing cam
         const stream = await navigator.mediaDevices.getUserMedia({
             video: true,
@@ -44,7 +44,10 @@ export default class Face extends Component {
         setInterval(async () => {
             // detecting face with expression
             const detection = await faceapi
-                .detectAllFaces(this.video, new faceapi.TinyFaceDetectorOptions())
+                .detectAllFaces(
+                    this.video,
+                    new faceapi.TinyFaceDetectorOptions()
+                )
                 .withFaceExpressions();
 
             // handling returning array from detectAllFaces
@@ -60,7 +63,7 @@ export default class Face extends Component {
                     disgusted: 0.003466457361355424
                     surprised: 0.000011861078746733256
                     */
-                    let status = '';
+                    let status = "";
                     let valueStatus = 0.0;
                     for (const [key, value] of Object.entries(
                         element.expressions
@@ -71,17 +74,18 @@ export default class Face extends Component {
                         }
                     }
                     // after getting the expression with the highest score setting it to the state
-                    this.setState({currentExpression:this.state.expressions[status]})
+                    this.setState({
+                        currentExpression: this.state.expressions[status],
+                    });
                 });
             } else {
-                console.log("no faces")
+                console.log("no faces");
             }
-        }, 500); // miliseconds to try detecting 
+        }, 500); // miliseconds to try detecting
     }
 
-    render (){
+    render() {
         // returning the expressed expression
         return <div>{this.state.currentExpression}</div>;
     }
 }
-
