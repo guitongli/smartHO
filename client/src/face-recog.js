@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 // import { useEffect, useState } from 'react';
-import * as faceapi from 'face-api.js';
+import * as faceapi from "face-api.js";
 
 export default class Face extends Component {
     constructor() {
