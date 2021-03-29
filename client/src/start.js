@@ -1,7 +1,4 @@
 import ReactDOM from "react-dom";
+import Face from "face-api.js";
 
-ReactDOM.render(<HelloWorld />, document.querySelector("main"));
-
-function HelloWorld() {
-    return <div>Hello, World!</div>;
-}
+ReactDOM.render(<Face />, document.querySelector("main"));
