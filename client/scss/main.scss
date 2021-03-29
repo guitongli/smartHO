@@ -1,0 +1,15 @@
+@import "./header";
+@import "./sidebar";
+@import "./app";
+@import "./chat";
+@import "./login";
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+main {
+    background-color: wheat;
+    font-family: sans-serif;
+}
