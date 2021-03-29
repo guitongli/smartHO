@@ -2,19 +2,56 @@ import React from "react";
 import { Component } from "react";
 // import { useEffect, useState } from 'react';
 
+// checking if the browser supports speach recog
+var SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
 export default class Face extends Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            error: false,
+            supported: false,
+            buttonText: "",
+            class: "",
+            recognizedText: "",
+        };
     }
 
-    // loading face-api models on load
-    componentDidMount() {}
+    // loading SpeechRecognition-api on load?????
+    componentDidMount() {
+        if (typeof SpeechRecognition === "undefined") {
+            this.setState({ error: true }); // need an err msg and robably remove the button!!
+        } else {
+            this.setState({ supported: true }); // do i need to add the other state key here?
+        }
+        // creating an instance
+        // speechRecognition = new webkitSpeechRecognition();
+        // speechRecognition.onresult = console.log;
+        // speechRecognition.start();
+    }
 
     handleClick() {
-        const recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
-        recognition.start();
+        // must prevent default?
+        if (this.supported) {
+            let listening = false;
+            var recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            const start = () => {
+                recognition.start();
+                this.setState({ buttonText: "Stop listening" });
+                this.setState({ class: "speaking" });
+            };
+            const stop = () => {
+                recognition.stop();
+                this.setState({
+                    buttonText: "Start listening",
+                });
+                this.setState({ class: "" });
+            };
+            listening ? stop() : start();
+            listening = !listening;
+        }
         recognition.onresult = (e) => {
             let last = e.results.length - 1;
             let text = e.results[last][0].transcript;
