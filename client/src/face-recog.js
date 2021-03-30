@@ -6,6 +6,13 @@ export default class Face extends Component {
         super();
         this.state = {
             expressions: {
+                // neutral: ":|",
+                // happy: ":)",
+                // sad: ":'(",
+                // angry: ":(",
+                // fearful: ":O",
+                // disgusted: ":D",
+                // surprised: ":B",
                 neutral: "😐",
                 happy: "😃",
                 sad: "😥",
@@ -51,29 +58,38 @@ export default class Face extends Component {
                 )
                 .withFaceExpressions();
             console.log("detection: ", detection);
+            // console.log(`detection[0]`, detection[0]);
+            console.log(`detection[0].expressions`, detection[0].expressions);
+            // console.log(
+            //     `detection[0].expressions.FaceExpressions`,
+            //     detection[0].expressions.FaceExpressions
+            // );
+            // console.log(`type`, typeof detection[0].expressions);
 
             // assigning related emoji
             if (detection.length > 0) {
                 let expressionKey;
-                let expressionValue;
-                for (const [key, value] in detection) {
-                    if (value > expressionValue) {
+                let expressionValue = 0.0;
+                for (const key in detection[0].expressions) {
+                    if (detection[0].expressions[key] > expressionValue) {
                         expressionKey = key;
-                        expressionValue = value;
+                        expressionValue = detection[0].expressions[key];
                     }
-                    this.setState({
-                        currentExpression: this.expressions[expressionKey],
-                    });
-                    console.log(`currentExpression`, this.currentExpression); // can't get this log!
                 }
+                console.log(`expressionKey`, expressionKey);
+                console.log(`expressionValue`, expressionValue);
+                this.setState({
+                    currentExpression: this.state.expressions[expressionKey],
+                });
+                console.log(`currentExpression`, this.currentExpression); // can't get this log!
             }
-        }, 500); // miliseconds to try detecting - should we increase this to make sure it captures one image in a reasonable time or should we get rid of it at all?
+        }, 10000); // miliseconds to try detecting - should we increase this to make sure it captures one image in a reasonable time or should we get rid of it at all?
     }
     render() {
         // returning the expressed expression
         return (
             <div>
-                {this.state.currentExpression}
+                <p>Current Emotion is: {this.state.currentExpression}</p>
                 <video
                     id="video"
                     width="320"
