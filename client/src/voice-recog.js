@@ -6,20 +6,19 @@ import { Component } from "react";
 var SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
-export default class Face extends Component {
+export default class Voice extends Component {
     constructor() {
         super();
         this.state = {
             error: false,
             supported: false,
-            listening: false,
             buttonText: "",
             class: "",
             recognizedText: "",
         };
     }
 
-    // checking SpeechRecognition-api support on load
+    // loading SpeechRecognition-api on load?????
     componentDidMount() {
         if (typeof SpeechRecognition === "undefined") {
             this.setState({ error: true }); // need an err msg and robably remove the button!!
@@ -27,49 +26,28 @@ export default class Face extends Component {
             this.setState({ supported: true }); // do i need to add the other state key here?
         }
     }
-    handleClick() {
+
+    handleKeyDown() {
         // must prevent default?
         if (this.supported) {
-            this.setState({ listening: !this.listening });
-            this.handleChange();
-        } else {
-            return;
+            let listening = false;
+            var recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            const start = () => {
+                recognition.start();
+                this.setState({ buttonText: "Stop listening" });
+                this.setState({ class: "speaking" });
+            };
+            const stop = () => {
+                recognition.stop();
+                this.setState({
+                    buttonText: "Start listening",
+                });
+                this.setState({ class: "" });
+            };
+            listening ? stop() : start();
+            listening = !listening;
         }
-    }
-    handleChange() {
-        const recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
-
-        // start record
-        const start = () => {
-            recognition.start();
-            this.setState({ buttonText: "Stop listening" });
-            this.setState({ class: "speaking" });
-        };
-        // stop record
-        const stop = () => {
-            recognition.stop();
-            this.setState({
-                buttonText: "Start listening",
-            });
-            this.setState({ class: "" });
-        };
-        const onResult = (e) => {
-            for (const result of e.results) {
-                const text = document.createTextNode(result[0].transcript);
-                const p = document.createElement("p");
-                if (result.isFinal) {
-                    p.classList.add("final");
-                }
-                p.appendChild(text);
-                result.appendChild(p);
-            }
-        };
-
-        // handling record
-        this.listening ? stop() : start();
-
-        // transferring to text
         recognition.onresult = (e) => {
             let last = e.results.length - 1;
             let text = e.results[last][0].transcript;
@@ -84,14 +62,18 @@ export default class Face extends Component {
         };
     }
 
+    handleKeyUp() {
+        // must send data?
+    }
+
     render() {
         return (
-            <>
-                <div>{/* the message */}</div>
-                <button onClick={() => this.handleClick()}>
-                    {this.state.recognizedText}
-                </button>
-            </>
+            <button
+                onKeyDown={() => this.handleKeyDown()}
+                onKeyUp={() => this.handleKeyUp()}
+            >
+                Record {this.state.recognizedText}
+            </button>
         );
     }
 }

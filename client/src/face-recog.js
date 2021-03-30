@@ -2,17 +2,11 @@ import React from "react";
 import { Component } from "react";
 import * as faceapi from "face-api.js";
 export default class Face extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        // parent should pass a faceInChat(emoji){return emoji}
+        super(props);
         this.state = {
             expressions: {
-                // neutral: ":|",
-                // happy: ":)",
-                // sad: ":'(",
-                // angry: ":(",
-                // fearful: ":O",
-                // disgusted: ":D",
-                // surprised: ":B",
                 neutral: "😐",
                 happy: "😃",
                 sad: "😥",
@@ -33,7 +27,9 @@ export default class Face extends Component {
             faceapi.nets.faceExpressionNet.loadFromUri("/models"),
         ]);
         console.log("about to call start video...");
-        this.startVideo();
+        if (this.props.startCommand) {
+            this.startVideo();
+        }
     }
     // accessing cam
     async startVideo() {
@@ -49,7 +45,7 @@ export default class Face extends Component {
     // detecing expression
     detectExpression() {
         // detecting the face periodically
-        setInterval(async () => {
+        const faceInterval = setInterval(async () => {
             // detecting face with expression
             const detection = await faceapi
                 .detectAllFaces(
@@ -58,13 +54,7 @@ export default class Face extends Component {
                 )
                 .withFaceExpressions();
             console.log("detection: ", detection);
-            // console.log(`detection[0]`, detection[0]);
             console.log(`detection[0].expressions`, detection[0].expressions);
-            // console.log(
-            //     `detection[0].expressions.FaceExpressions`,
-            //     detection[0].expressions.FaceExpressions
-            // );
-            // console.log(`type`, typeof detection[0].expressions);
 
             // assigning related emoji
             if (detection.length > 0) {
@@ -81,14 +71,19 @@ export default class Face extends Component {
                 this.setState({
                     currentExpression: this.state.expressions[expressionKey],
                 });
-                console.log(`currentExpression`, this.currentExpression); // can't get this log!
+                // console.log(`currentExpression`, this.state.currentExpression);
             }
-        }, 10000); // miliseconds to try detecting - should we increase this to make sure it captures one image in a reasonable time or should we get rid of it at all?
+        }, 2000);
+        if (this.state.currentExpression != null) {
+            this.props.faceInChat(this.currentExpression); // passing the emoji to chat.js
+            clearInterval(faceInterval); // stopping the detection after a successful one
+            this.setState({ currentExpression: null }); // setting all back to nothing
+        }
     }
     render() {
         // returning the expressed expression
         return (
-            <div>
+            <div style="visibilty:hidden">
                 <p>Current Emotion is: {this.state.currentExpression}</p>
                 <video
                     id="video"
@@ -102,59 +97,3 @@ export default class Face extends Component {
         );
     }
 }
-
-// ============================================================================
-// ============================================================================
-// ============================================================================
-
-//             // // handling returning array from detectAllFaces
-//             // if (detection.length > 0) {
-//             //     detection.forEach((element) => {
-//             //         // an example of face element's expression attributes
-//             //         /*
-//             //         neutral: 0.33032259345054626
-//             //         happy: 0.0004914478631690145
-//             //         sad: 0.6230283975601196
-//             //         angry: 0.042668383568525314
-//             //         fearful: 0.000010881130037887488
-//             //         disgusted: 0.003466457361355424
-//             //         surprised: 0.000011861078746733256
-//             //         */
-//             //         let status = "";
-//             //         let valueStatus = 0.0;
-//             //         for (const [key, value] of Object.entries(
-//             //             element.expressions
-//             //         )) {
-//             //             if (value > valueStatus) {
-//             //                 status = key;
-//             //                 valueStatus = value;
-//             //             }
-//             //         }
-//             //         // after getting the expression with the highest score setting it to the state
-//             //         this.setState({
-//             //             currentExpression: this.state.expressions[status],
-//             //         });
-//             //     });
-//             // } else {
-//             //     console.log("no faces");
-//             // }
-//         }, 500); // miliseconds to try detecting
-//     }
-
-//     render() {
-//         // returning the expressed expression
-//         return (
-//             <div>
-//                 {this.state.currentExpression}
-//                 <video
-//                     id="video"
-//                     width="320"
-//                     height="180"
-//                     autoPlay
-//                     muted
-//                     ref={this.video}
-//                 ></video>
-//             </div>
-//         );
-//     }
-// }
