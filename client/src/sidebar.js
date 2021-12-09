@@ -13,11 +13,11 @@ import { useSelector, useDispatch } from "react-redux";
 
 export default function Sidebar() {
     const dispatch = useDispatch();
-    const channels = useSelector((state) => {
-        return state.channels;
+    const term= useSelector((state) => {
+        return state.term;
     });
-    const user = useSelector((state) => {
-        return state.current_user;
+    const region = useSelector((state) => {
+        return state.region;
     });
     useEffect(() => {
         db.collection("rooms").onSnapshot((snapshot) => {
@@ -33,22 +33,8 @@ export default function Sidebar() {
     }, []);
     return (
         <div className="sidebar">
-            <div className="sidebar__header">
-                <div className="sidebar__info">
-                    <h2>{user?.displayName}</h2>
-                    <h3>
-                        <FiberManualRecording />
-                        user1
-                    </h3>
-                </div>
-                <CreateIcon />
-            </div>
-            <SidebarOption Icon={InsertCommentIcon} title="Threads" />
-            <hr />
-            <SidebarOption Icon={InboxIcon} title="Inbox" />
-            <SidebarOption Icon={ExpandMoreIcon} title="Show More" />
-            <SidebarOption Icon={PeopleAltIcon} title="People and groups" />
-            <SidebarOption Icon={ExpandMoreIcon} title="Show More" />
+             
+           
             {channels &&
                 channels.map((channel) => {
                     return (
@@ -59,7 +45,7 @@ export default function Sidebar() {
                         />
                     );
                 })}
-            <SidebarOption Icon={AddIcon} addChannelOption={true} />
+   
         </div>
     );
 }

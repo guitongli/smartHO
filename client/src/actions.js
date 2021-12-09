@@ -1,32 +1,47 @@
-import db from "./firebase";
 
-export function putChannels(array) {
+
+export function putRegion(region) {
     
     return {
-        type: "PUT_CHANNELS",
-        channels: array
+        type: "PUT_REGION",
+        region: region
        
     };
 }
 
-export function putUser(idToken) {
+export function putTerm(term) {
     return {
-        type: "PUT_USER",
+        type: "PUT_TERM",
 
-        idToken,
+        term,
     };
 }
-export function putRoomDetails(room_details) {
+export function putFirmName1(firm1) {
     return {
-        type: "PUT_ROOM_DETAILS",
+        type: "PUT_FIRM_Name_1",
 
-        room_details,
+        firm1,
     };
 }
-export function putRoomMessages(room_messages) {
+export function putFirmName2(firm2) {
     return {
-        type: "PUT_ROOM_MESSAGES",
+        type: "PUT_FIRM_Name_2",
 
-        room_messages,
+        firm2,
     };
 }
+export function putFirmAdd1(firm1) {
+    return {
+        type: "PUT_FIRM_ADD_1",
+
+        firm1,
+    };
+}
+export function putFirmAdd2(firm2) {
+    return {
+        type: "PUT_FIRM_ADD_2",
+
+        firm2,
+    };
+}
+

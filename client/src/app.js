@@ -6,7 +6,7 @@ import { useState } from "react";
 import Login from './login';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import {useSelector} from 'react-redux';
-
+import Face from './face-recog';
 export default function App() {
     const user = useSelector((state)=>{
         return state && state.current_user;
@@ -15,10 +15,11 @@ export default function App() {
     return (
         <div className="app">
             <Router>
-                {user ? (
-                    <>
+                {/* {user ? (
+                    <> */}
                          
                         <Header />
+                        <Face />
                         <div className="app__body">
                             <Sidebar />
                             <Switch>
@@ -30,7 +31,7 @@ export default function App() {
                                 </Route>
                             </Switch>
                         </div>
-                    </>
+                    {/* </> */}
                 ):(
                     <Login/>
                 ) }
